@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="container dashboard">
+    <div class="dashboard-header">
+        <div>
+            <h1>🛡️ Admin Dashboard</h1>
+            <p class="text-muted">Platform overview and management</p>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="dashboard-stats">
+        <div class="dash-stat-card">
+            <div class="stat-val">{{ stats.total_users }}</div>
+            <div class="stat-lbl">Total Users</div>
+        </div>
+        <div class="dash-stat-card">
+            <div class="stat-val">{{ stats.total_events }}</div>
+            <div class="stat-lbl">Total Events</div>
+        </div>
+        <div class="dash-stat-card">
+            <div class="stat-val">₹{{ "%.0f"|format(stats.total_revenue) }}</div>
+            <div class="stat-lbl">Total Revenue</div>
+        </div>
+        <div class="dash-stat-card">
+            <div class="stat-val">{{ stats.total_tickets }}</div>
+            <div class="stat-lbl">Tickets Sold</div>
+        </div>
+        <div class="dash-stat-card">
+            <div class="stat-val">{{ stats.organizers }}</div>
+            <div class="stat-lbl">Organizers</div>
+        </div>
+        <div class="dash-stat-card">
+            <div class="stat-val">{{ stats.regular_users }}</div>
+            <div class="stat-lbl">Regular Users</div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="dash-tabs">
+        <button class="dash-tab active" data-tab="tab-users">👥 Users</button>
+        <button class="dash-tab" data-tab="tab-events">📅 Events</button>
+        <button class="dash-tab" data-tab="tab-messages">📩 Messages</button>
+    </div>
+
+    <!-- Users Tab -->
+    <div class="tab-content active" id="tab-users">
+        <div class="glass-card" style="padding:0;overflow:hidden;">
+            <div class="table-wrap" style="border:none;border-radius:0;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for u in users %}
+                        <tr>
+                            <td><strong style="color:var(--text-primary);">{{ u.name }}</strong></td>
+                            <td>{{ u.email }}</td>
+                            <td><span
+                                    class="badge {% if u.role == 'admin' %}badge-danger{% elif u.role == 'organizer' %}badge-purple{% else %}badge-info{% endif %}">{{
+                                    u.role }}</span></td>
+                            <td>{{ u.created_at[:10] if u.created_at else 'N/A' }}</td>
+                            <td>
+                                {% if u.role != 'admin' %}
+                                <form method="POST" action="{{ url_for('delete_user', user_id=u.id) }}"
+                                    style="display:inline;" onsubmit="return confirm('Delete this user?')">
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                                {% else %}
+                                <span class="text-muted" style="font-size:0.8rem;">Protected</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Events Tab -->
+    <div class="tab-content" id="tab-events">
+        <div class="glass-card" style="padding:0;overflow:hidden;">
+            <div class="table-wrap" style="border:none;border-radius:0;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Organizer</th>
+                            <th>Date</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ev in events %}
+                        <tr>
+                            <td><strong style="color:var(--text-primary);">{{ ev.title }}</strong></td>
+                            <td>{{ ev.organizer_name }}</td>
+                            <td>{{ ev.date }}</td>
+                            <td>{% if ev.price == 0 %}Free{% else %}₹{{ "%.0f"|format(ev.price) }}{% endif %}</td>
+                            <td><span
+                                    class="badge {% if ev.status == 'approved' %}badge-success{% else %}badge-danger{% endif %}">{{
+                                    ev.status }}</span></td>
+                            <td>
+                                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                                    <a href="{{ url_for('event_detail', event_id=ev.id) }}"
+                                        class="btn btn-sm btn-secondary">View</a>
+                                    <form method="POST" action="{{ url_for('toggle_event', event_id=ev.id) }}"
+                                        style="display:inline;">
+                                        <button type="submit"
+                                            class="btn btn-sm {% if ev.status == 'approved' %}btn-danger{% else %}btn-success{% endif %}">
+                                            {% if ev.status == 'approved' %}Suspend{% else %}Approve{% endif %}
+                                        </button>
+                                    </form>
+                                    <form method="POST" action="{{ url_for('delete_event', event_id=ev.id) }}"
+                                        style="display:inline;" onsubmit="return confirm('Delete this event?')">
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Messages Tab -->
+    <div class="tab-content" id="tab-messages">
+        {% if contacts %}
+        {% for c in contacts %}
+        <div class="glass-card mb-2">
+            <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:8px;">
+                <div>
+                    <strong>{{ c.name }}</strong> <span class="text-muted">&lt;{{ c.email }}&gt;</span>
+                    {% if c.subject %}<br><span style="color:var(--accent-purple);font-size:0.9rem;">{{ c.subject
+                        }}</span>{% endif %}
+                </div>
+                <span class="text-muted" style="font-size:0.8rem;">{{ c.created_at[:16] if c.created_at else ''
+                    }}</span>
+            </div>
+            <p class="text-muted mt-1" style="font-size:0.9rem;">{{ c.message }}</p>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="glass-card text-center" style="padding:40px;">
+            <p>📩 No contact messages yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

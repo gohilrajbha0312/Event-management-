@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Attendees — {{ event.title }}{% endblock %}
+{% block content %}
+<div class="container dashboard">
+    <div class="dashboard-header">
+        <div>
+            <h1>👥 Attendees</h1>
+            <p class="text-muted">{{ event.title }}</p>
+        </div>
+        <a href="{{ url_for('organizer_dashboard') }}" class="btn btn-secondary">← Back to Dashboard</a>
+    </div>
+
+    {% if attendees %}
+    <div class="glass-card" style="padding:0;overflow:hidden;">
+        <div class="table-wrap" style="border:none;border-radius:0;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Tickets</th>
+                        <th>Amount Paid</th>
+                        <th>Purchased</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in attendees %}
+                    <tr>
+                        <td><strong style="color:var(--text-primary);">{{ a.name }}</strong></td>
+                        <td>{{ a.email }}</td>
+                        <td>{{ a.quantity }}</td>
+                        <td>₹{{ "%.0f"|format(a.total_price) }}</td>
+                        <td>{{ a.purchased_at[:16] if a.purchased_at else 'N/A' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="glass-card text-center" style="padding:60px 20px;">
+        <p style="font-size:3rem;margin-bottom:16px;">👥</p>
+        <h3>No attendees yet</h3>
+        <p class="text-muted">Share your event to get registrations.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

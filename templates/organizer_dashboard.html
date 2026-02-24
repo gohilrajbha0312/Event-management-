@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}Organizer Dashboard{% endblock %}
+{% block content %}
+<div class="container dashboard">
+    <div class="dashboard-header">
+        <div>
+            <h1>📋 Organizer Dashboard</h1>
+            <p class="text-muted">Create and manage your events</p>
+        </div>
+        <a href="{{ url_for('create_event') }}" class="btn btn-primary">➕ Create Event</a>
+    </div>
+
+    <!-- Stats -->
+    <div class="dashboard-stats">
+        <div class="dash-stat-card">
+            <div class="stat-val">{{ event_stats|length }}</div>
+            <div class="stat-lbl">Total Events</div>
+        </div>
+        <div class="dash-stat-card">
+            <div class="stat-val">{{ event_stats|sum(attribute='attendees') }}</div>
+            <div class="stat-lbl">Total Attendees</div>
+        </div>
+        <div class="dash-stat-card">
+            <div class="stat-val">₹{{ "%.0f"|format(total_revenue) }}</div>
+            <div class="stat-lbl">Total Revenue</div>
+        </div>
+    </div>
+
+    <!-- Events Table -->
+    <div class="glass-card" style="padding:0;overflow:hidden;">
+        <div style="padding:24px 24px 0;">
+            <h3>My Events</h3>
+        </div>
+        {% if event_stats %}
+        <div class="table-wrap" style="border:none;border-radius:0;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Date</th>
+                        <th>Price</th>
+                        <th>Attendees</th>
+                        <th>Revenue</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in event_stats %}
+                    <tr>
+                        <td><strong style="color:var(--text-primary);">{{ item.event.title }}</strong></td>
+                        <td>{{ item.event.date }}</td>
+                        <td>{% if item.event.price == 0 %}Free{% else %}₹{{ "%.0f"|format(item.event.price) }}{% endif
+                            %}</td>
+                        <td>{{ item.attendees }} / {{ item.event.capacity }}</td>
+                        <td>₹{{ "%.0f"|format(item.revenue) }}</td>
+                        <td><span
+                                class="badge {% if item.event.status == 'approved' %}badge-success{% else %}badge-danger{% endif %}">{{
+                                item.event.status }}</span></td>
+                        <td>
+                            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                                <a href="{{ url_for('event_detail', event_id=item.event.id) }}"
+                                    class="btn btn-sm btn-secondary">View</a>
+                                <a href="{{ url_for('edit_event', event_id=item.event.id) }}"
+                                    class="btn btn-sm btn-secondary">Edit</a>
+                                <a href="{{ url_for('event_attendees', event_id=item.event.id) }}"
+                                    class="btn btn-sm btn-secondary">Attendees</a>
+                                <form method="POST" action="{{ url_for('delete_event', event_id=item.event.id) }}"
+                                    style="display:inline;" onsubmit="return confirm('Are you sure?')">
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center" style="padding:40px 20px;">
+            <p style="font-size:3rem;margin-bottom:16px;">📋</p>
+            <h3>No events yet</h3>
+            <p class="text-muted mb-3">Create your first event to get started.</p>
+            <a href="{{ url_for('create_event') }}" class="btn btn-primary">Create Event</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

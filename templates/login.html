@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Log In{% endblock %}
+{% block content %}
+<div class="auth-page">
+    <div class="auth-card glass-card">
+        <h1>Welcome Back</h1>
+        <p class="subtitle">Log in to your EventFlow account</p>
+        <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="••••••••"
+                    required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">Log In →</button>
+        </form>
+        <div class="text-center mt-2">
+            <a href="{{ url_for('forgot_password') }}" style="font-size:0.85rem;">Forgot Password?</a>
+        </div>
+        <div class="auth-links">
+            Don't have an account? <a href="{{ url_for('signup') }}">Sign Up</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

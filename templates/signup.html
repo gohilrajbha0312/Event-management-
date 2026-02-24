@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up{% endblock %}
+{% block content %}
+<div class="auth-page">
+    <div class="auth-card glass-card">
+        <h1>Create Account</h1>
+        <p class="subtitle">Join EventFlow and start your journey</p>
+        <form method="POST" action="{{ url_for('signup') }}">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="John Doe" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="you@example.com" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="••••••••"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control"
+                        placeholder="••••••••" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone (optional)</label>
+                <input type="tel" id="phone" name="phone" class="form-control" placeholder="+1-555-0100">
+            </div>
+            <div class="form-group">
+                <label for="role">I want to</label>
+                <select id="role" name="role" class="form-control">
+                    <option value="user">🎫 Attend Events</option>
+                    <option value="organizer">📋 Organize Events</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">Create Account →</button>
+        </form>
+        <div class="auth-links">
+            Already have an account? <a href="{{ url_for('login') }}">Log In</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

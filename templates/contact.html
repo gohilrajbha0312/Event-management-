@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Contact{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>Contact Us</h1>
+        <p>Have a question or need support? We'd love to hear from you.</p>
+    </div>
+
+    <div class="contact-grid" style="padding-bottom:80px;">
+        <!-- Contact Form -->
+        <div class="glass-card">
+            <h3 class="mb-3">Send a Message</h3>
+            <form method="POST" action="{{ url_for('contact') }}">
+                <div class="form-group">
+                    <label for="name">Your Name *</label>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="you@example.com"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" class="form-control" placeholder="How can we help?">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message *</label>
+                    <textarea id="message" name="message" class="form-control" placeholder="Write your message here..."
+                        rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg btn-block">📨 Send Message</button>
+            </form>
+        </div>
+
+        <!-- Contact Info -->
+        <div>
+            <div class="contact-info-card">
+                <div class="icon">📧</div>
+                <div>
+                    <h4>Email</h4>
+                    <p>support@eventflow.com</p>
+                    <p>business@eventflow.com</p>
+                </div>
+            </div>
+            <div class="contact-info-card">
+                <div class="icon">📞</div>
+                <div>
+                    <h4>Phone</h4>
+                    <p>+91-278-242-1234</p>
+                    <p>Mon-Sat, 10AM - 7PM IST</p>
+                </div>
+            </div>
+            <div class="contact-info-card">
+                <div class="icon">📍</div>
+                <div>
+                    <h4>Office</h4>
+                    <p>Waghawadi Road, Ghogha Circle</p>
+                    <p>Bhavnagar, Gujarat 364002</p>
+                </div>
+            </div>
+            <div class="contact-info-card">
+                <div class="icon">💬</div>
+                <div>
+                    <h4>Live Chat</h4>
+                    <p>Available during business hours</p>
+                    <p>Average response: 5 minutes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

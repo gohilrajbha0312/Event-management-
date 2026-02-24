@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="container dashboard">
+    <div class="dashboard-header">
+        <div>
+            <h1>👋 Welcome, {{ user.name }}</h1>
+            <p class="text-muted">Manage your events and profile</p>
+        </div>
+        <a href="{{ url_for('events') }}" class="btn btn-primary">🔍 Browse Events</a>
+    </div>
+
+    <!-- Tabs -->
+    <div class="dash-tabs">
+        <button class="dash-tab active" data-tab="tab-tickets">🎫 My Tickets</button>
+        <button class="dash-tab" data-tab="tab-profile">👤 Profile</button>
+    </div>
+
+    <!-- Tickets Tab -->
+    <div class="tab-content active" id="tab-tickets">
+        {% if tickets %}
+        {% for ticket in tickets %}
+        <div class="ticket-card">
+            <div class="ticket-card-info">
+                <h4>{{ ticket.title }}</h4>
+                <div class="ticket-card-meta">
+                    <span>📅 {{ ticket.date }} at {{ ticket.time }} &nbsp;|&nbsp; 📍 {{ ticket.location }}</span><br>
+                    <span>🎫 {{ ticket.quantity }} ticket(s) &nbsp;|&nbsp; 💰 ₹{{ "%.0f"|format(ticket.total_price) }}
+                        &nbsp;|&nbsp; <span class="badge badge-success">{{ ticket.status }}</span></span>
+                </div>
+            </div>
+            <a href="{{ url_for('event_detail', event_id=ticket.event_id) }}" class="btn btn-sm btn-secondary">View
+                Event</a>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="glass-card text-center" style="padding:60px 20px;">
+            <p style="font-size:3rem;margin-bottom:16px;">🎫</p>
+            <h3>No tickets yet</h3>
+            <p class="text-muted mb-3">You haven't registered for any events yet.</p>
+            <a href="{{ url_for('events') }}" class="btn btn-primary">Browse Events</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Profile Tab -->
+    <div class="tab-content" id="tab-profile">
+        <div class="glass-card" style="max-width:500px;">
+            <h3 class="mb-3">Edit Profile</h3>
+            <form method="POST" action="{{ url_for('update_profile') }}">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" class="form-control" value="{{ user.name }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="form-control" value="{{ user.email }}" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" name="phone" class="form-control" value="{{ user.phone or '' }}">
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

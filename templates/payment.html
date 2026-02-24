@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% block title %}UPI Payment{% endblock %}
+{% block content %}
+<div class="container" style="max-width:900px;margin:0 auto;">
+    <div class="page-header" style="padding-top:20px;">
+        <h1>📱 Pay via UPI</h1>
+        <p>Scan QR code or tap to open your UPI app</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start;">
+
+        <!-- QR Card (matches the user's screenshot style) -->
+        <div style="background:#eef2ff;border-radius:24px;padding:40px 30px;text-align:center;">
+            <!-- Profile -->
+            <div style="margin-bottom:20px;">
+                <div
+                    style="width:50px;height:50px;border-radius:50%;background:#ccc;display:inline-block;vertical-align:middle;margin-right:10px;overflow:hidden;">
+                    <svg viewBox="0 0 50 50" style="width:100%;height:100%;fill:#888;">
+                        <circle cx="25" cy="20" r="9" />
+                        <ellipse cx="25" cy="45" rx="16" ry="14" />
+                    </svg>
+                </div>
+                <span style="font-size:1.5rem;font-weight:700;color:#1a1a2e;vertical-align:middle;">{{ upi_merchant_name
+                    }}</span>
+            </div>
+
+            <!-- QR Code -->
+            <div
+                style="background:#fff;border-radius:18px;padding:24px;display:inline-block;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+                <div id="qr-code" style="display:inline-block;"></div>
+            </div>
+
+            <!-- UPI ID -->
+            <p style="color:#333;font-size:1rem;margin:12px 0 4px;">
+                UPI ID: <strong>{{ upi_merchant_id }}</strong>
+            </p>
+
+            <!-- Amount Badge -->
+            <div
+                style="margin-top:16px;background:#fff;border-radius:12px;padding:12px 24px;display:inline-block;box-shadow:0 1px 6px rgba(0,0,0,0.06);">
+                <span style="font-size:0.85rem;color:#666;">Amount to Pay</span><br>
+                <span style="font-size:1.8rem;font-weight:800;color:#1a1a2e;">₹{{ "%.0f"|format(total) }}</span>
+            </div>
+
+            <!-- Scan instruction -->
+            <p style="color:#555;font-size:0.9rem;margin-top:20px;">
+                Scan to pay with any UPI app
+            </p>
+
+            <!-- UPI App Buttons (for mobile) -->
+            <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px;">
+                <a href="{{ upi_link }}" class="btn btn-primary" style="font-size:0.85rem;padding:8px 16px;">
+                    📱 Open UPI App
+                </a>
+                <a href="gpay://upi/pay?pa={{ upi_merchant_id }}&pn={{ upi_merchant_name|urlencode }}&am={{ '%.2f'|format(total) }}&cu=INR&tn={{ ('EventFlow - ' + event.title)|urlencode }}"
+                    class="btn"
+                    style="background:linear-gradient(135deg,#4285f4,#34a853);color:#fff;font-size:0.85rem;padding:8px 16px;border:none;border-radius:8px;">
+                    💚 GPay
+                </a>
+                <a href="phonepe://pay?pa={{ upi_merchant_id }}&pn={{ upi_merchant_name|urlencode }}&am={{ '%.2f'|format(total) }}&cu=INR&tn={{ ('EventFlow - ' + event.title)|urlencode }}"
+                    class="btn"
+                    style="background:linear-gradient(135deg,#5f259f,#8431a6);color:#fff;font-size:0.85rem;padding:8px 16px;border:none;border-radius:8px;">
+                    💜 PhonePe
+                </a>
+                <a href="paytmmp://pay?pa={{ upi_merchant_id }}&pn={{ upi_merchant_name|urlencode }}&am={{ '%.2f'|format(total) }}&cu=INR&tn={{ ('EventFlow - ' + event.title)|urlencode }}"
+                    class="btn"
+                    style="background:linear-gradient(135deg,#00b9f1,#002970);color:#fff;font-size:0.85rem;padding:8px 16px;border:none;border-radius:8px;">
+                    💙 Paytm
+                </a>
+            </div>
+        </div>
+
+        <!-- Right Side: Order Summary + Confirm -->
+        <div>
+            <!-- Order Summary -->
+            <div class="glass-card order-summary">
+                <h3 class="mb-3">Order Summary</h3>
+                <div class="line-item">
+                    <span>{{ event.title }}</span>
+                </div>
+                <div class="line-item">
+                    <span>Date</span>
+                    <span>{{ event.date }}</span>
+                </div>
+                <div class="line-item">
+                    <span>Venue</span>
+                    <span>{{ event.venue or event.location }}</span>
+                </div>
+                <div class="line-item">
+                    <span>Ticket Price</span>
+                    <span>₹{{ "%.0f"|format(event.price) }}</span>
+                </div>
+                <div class="line-item">
+                    <span>Quantity</span>
+                    <span>{{ quantity }}</span>
+                </div>
+                <div class="line-item total">
+                    <span>Total</span>
+                    <span>₹{{ "%.0f"|format(total) }}</span>
+                </div>
+            </div>
+
+            <!-- Confirm Payment -->
+            <div class="glass-card"
+                style="margin-top:20px;background:rgba(16,185,129,0.1);border:1px solid var(--accent-emerald);padding:20px;">
+                <p style="margin:0 0 12px;font-weight:600;color:var(--accent-emerald);">✅ After completing UPI payment,
+                    click below:</p>
+                <form method="POST" action="{{ url_for('process_payment', event_id=event.id) }}">
+                    <input type="hidden" name="quantity" value="{{ quantity }}">
+                    <input type="hidden" name="method" value="upi">
+                    <input type="hidden" name="upi_id" value="upi-scanned">
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <input type="text" name="upi_ref" class="form-control"
+                            placeholder="Enter UPI Transaction ID (optional)" style="text-align:center;">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block"
+                        style="background:var(--accent-emerald);width:100%;">
+                        ✅ I Have Completed Payment — Confirm Registration
+                    </button>
+                </form>
+            </div>
+
+            <!-- Supported UPI Apps -->
+            <div class="glass-card" style="margin-top:16px;">
+                <h4 style="margin-bottom:12px;font-size:0.95rem;">Supported UPI Apps</h4>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center;">
+                    <div style="padding:12px;background:rgba(255,255,255,0.05);border-radius:10px;">
+                        <div style="font-size:1.5rem;">💚</div>
+                        <div style="font-size:0.75rem;color:var(--text-secondary);">Google Pay</div>
+                    </div>
+                    <div style="padding:12px;background:rgba(255,255,255,0.05);border-radius:10px;">
+                        <div style="font-size:1.5rem;">💜</div>
+                        <div style="font-size:0.75rem;color:var(--text-secondary);">PhonePe</div>
+                    </div>
+                    <div style="padding:12px;background:rgba(255,255,255,0.05);border-radius:10px;">
+                        <div style="font-size:1.5rem;">💙</div>
+                        <div style="font-size:0.75rem;color:var(--text-secondary);">Paytm</div>
+                    </div>
+                    <div style="padding:12px;background:rgba(255,255,255,0.05);border-radius:10px;">
+                        <div style="font-size:1.5rem;">🏦</div>
+                        <div style="font-size:0.75rem;color:var(--text-secondary);">BHIM</div>
+                    </div>
+                    <div style="padding:12px;background:rgba(255,255,255,0.05);border-radius:10px;">
+                        <div style="font-size:1.5rem;">🛒</div>
+                        <div style="font-size:0.75rem;color:var(--text-secondary);">Amazon Pay</div>
+                    </div>
+                    <div style="padding:12px;background:rgba(255,255,255,0.05);border-radius:10px;">
+                        <div style="font-size:1.5rem;">🏧</div>
+                        <div style="font-size:0.75rem;color:var(--text-secondary);">Any UPI App</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- QR Code JS Library -->
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+    new QRCode(document.getElementById("qr-code"), {
+        text: "{{ upi_link }}",
+        width: 220,
+        height: 220,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+</script>
+{% endblock %}

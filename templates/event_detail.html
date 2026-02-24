@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}{{ event.title }}{% endblock %}
+{% block content %}
+<div class="container event-detail">
+    <!-- Banner -->
+    {% if event.banner %}
+    <img src="{{ url_for('static', filename='uploads/' + event.banner) }}" alt="{{ event.title }}"
+        class="event-detail-banner">
+    {% else %}
+    <div class="event-detail-banner">🎪</div>
+    {% endif %}
+
+    <div class="event-detail-grid">
+        <!-- Left: Event Info -->
+        <div>
+            <span class="event-card-category">{{ event.category }}</span>
+            <h1>{{ event.title }}</h1>
+            <div class="event-meta" style="margin-top:16px;">
+                <span>👤 Organized by <strong>{{ event.organizer_name }}</strong></span>
+            </div>
+            <div class="event-detail-description">{{ event.description }}</div>
+        </div>
+
+        <!-- Right: Sidebar -->
+        <div>
+            <div class="glass-card event-info-card">
+                <div class="info-item">
+                    <div class="icon">📅</div>
+                    <div class="details">
+                        <h4>Date & Time</h4>
+                        <p>{{ event.date }} at {{ event.time }}</p>
+                        {% if event.end_date %}
+                        <p style="font-size:0.85rem;color:var(--text-muted);">Until {{ event.end_date }} at {{
+                            event.end_time }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="icon">📍</div>
+                    <div class="details">
+                        <h4>Location</h4>
+                        <p>{{ event.venue or 'TBA' }}</p>
+                        <p style="font-size:0.85rem;color:var(--text-muted);">{{ event.location }}</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="icon">🎫</div>
+                    <div class="details">
+                        <h4>Tickets</h4>
+                        <p>{{ tickets_sold }} / {{ event.capacity }} sold</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="icon">💰</div>
+                    <div class="details">
+                        <h4>Price</h4>
+                        {% if event.price == 0 %}
+                        <p style="color:var(--accent-emerald);font-weight:700;">Free</p>
+                        {% else %}
+                        <p style="color:var(--accent-emerald);font-weight:700;">₹{{ "%.0f"|format(event.price) }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="icon">✉️</div>
+                    <div class="details">
+                        <h4>Contact Organizer</h4>
+                        <p>{{ event.organizer_email }}</p>
+                    </div>
+                </div>
+
+                <div style="margin-top:20px;">
+                    {% if already_registered %}
+                    <button class="btn btn-success btn-block btn-lg" disabled>✅ Already Registered</button>
+                    {% elif tickets_sold >= event.capacity %}
+                    <button class="btn btn-danger btn-block btn-lg" disabled>Sold Out</button>
+                    {% elif current_user %}
+                    <a href="{{ url_for('register_event', event_id=event.id) }}"
+                        class="btn btn-primary btn-block btn-lg">🎫 Register Now</a>
+                    {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-primary btn-block btn-lg">Log In to Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

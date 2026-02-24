@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Registration Confirmed{% endblock %}
+{% block content %}
+<div class="container success-page">
+    <div class="container-xs">
+        <div class="success-icon">✅</div>
+        <h1 style="font-size:2rem;margin-bottom:12px;">Registration Confirmed!</h1>
+        <p class="text-muted mb-4">You're all set for the event. Here are your details.</p>
+
+        <div class="glass-card" style="text-align:left;">
+            <h3 class="mb-3">🎫 Ticket Details</h3>
+            {% if event %}
+            <div class="line-item"
+                style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-glass);font-size:0.9rem;">
+                <span class="text-muted">Event</span>
+                <span>{{ event.title }}</span>
+            </div>
+            <div class="line-item"
+                style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-glass);font-size:0.9rem;">
+                <span class="text-muted">Date</span>
+                <span>{{ event.date }} at {{ event.time }}</span>
+            </div>
+            <div class="line-item"
+                style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-glass);font-size:0.9rem;">
+                <span class="text-muted">Location</span>
+                <span>{{ event.venue or event.location }}</span>
+            </div>
+            {% endif %}
+            {% if ticket %}
+            <div class="line-item"
+                style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-glass);font-size:0.9rem;">
+                <span class="text-muted">Tickets</span>
+                <span>{{ ticket.quantity }}</span>
+            </div>
+            <div class="line-item"
+                style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-glass);font-size:0.9rem;">
+                <span class="text-muted">Total Paid</span>
+                <span style="color:var(--accent-emerald);font-weight:700;">₹{{ "%.0f"|format(ticket.total_price)
+                    }}</span>
+            </div>
+            <div class="line-item"
+                style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-glass);font-size:0.9rem;">
+                <span class="text-muted">Status</span>
+                <span class="badge badge-success">{{ ticket.status }}</span>
+            </div>
+            {% endif %}
+            {% if payment %}
+            <div class="line-item" style="display:flex;justify-content:space-between;padding:10px 0;font-size:0.9rem;">
+                <span class="text-muted">Transaction ID</span>
+                <span style="font-family:monospace;font-size:0.8rem;">{{ payment.transaction_id }}</span>
+            </div>
+            {% endif %}
+        </div>
+
+        <div style="display:flex;gap:12px;justify-content:center;margin-top:32px;">
+            <a href="{{ url_for('user_dashboard') }}" class="btn btn-primary btn-lg">📋 View Dashboard</a>
+            <a href="{{ url_for('events') }}" class="btn btn-secondary btn-lg">🔍 Browse More Events</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

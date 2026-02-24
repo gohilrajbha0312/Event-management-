@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block title %}FAQ{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>Frequently Asked Questions</h1>
+        <p>Find answers to common questions about EventFlow.</p>
+    </div>
+
+    <div class="faq-list" style="padding-bottom:80px;">
+        <div class="faq-item active">
+            <button class="faq-question">
+                What is EventFlow?
+                <span class="arrow">▼</span>
+            </button>
+            <div class="faq-answer">
+                EventFlow is a premium event management platform that allows you to discover, create, and manage events
+                of all kinds — from tech conferences to music festivals, business networking to wellness retreats. Our
+                platform connects event organizers with attendees worldwide.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                How do I create an event?
+                <span class="arrow">▼</span>
+            </button>
+            <div class="faq-answer">
+                To create an event, sign up as an Organizer, then navigate to your Organizer Dashboard and click "Create
+                Event." Fill in the event details including title, description, date, venue, ticket pricing, and
+                capacity. Upload a banner image and publish — it's that simple!
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                Is it free to create events?
+                <span class="arrow">▼</span>
+            </button>
+            <div class="faq-answer">
+                Yes! Creating events on EventFlow is completely free. You can set your own ticket prices (including free
+                events), and we only charge a small service fee on paid ticket transactions. There are no upfront costs
+                or monthly subscriptions.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                How do I register for an event?
+                <span class="arrow">▼</span>
+            </button>
+            <div class="faq-answer">
+                Browse our Events page, find an event you're interested in, and click "View Details." On the event page,
+                click "Register Now." For free events, you'll be registered instantly. For paid events, you'll be taken
+                to our secure checkout to complete your payment.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                What payment methods are accepted?
+                <span class="arrow">▼</span>
+            </button>
+            <div class="faq-answer">
+                We accept payments via UPI only. You can pay using any UPI app such as GPay, PhonePe, Paytm, BHIM, or
+                Amazon Pay. Simply enter your UPI ID (e.g. name@paytm, name@ybl, number@upi) at checkout. You'll
+                receive a confirmation email with your ticket details immediately after payment.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                Can I get a refund?
+                <span class="arrow">▼</span>
+            </button>
+            <div class="faq-answer">
+                Refund policies vary by event and are set by the organizer. Generally, refunds are available up to 48
+                hours before the event start time. For cancelled events, full refunds are processed automatically.
+                Contact the event organizer or our support team for specific refund requests.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                How do I access my tickets?
+                <span class="arrow">▼</span>
+            </button>
+            <div class="faq-answer">
+                All your tickets are available in your User Dashboard under "My Tickets." You can view event details,
+                download receipts, and access your digital tickets from there. We also send a confirmation email with
+                your ticket information after registration.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                What's the difference between User and Organizer accounts?
+                <span class="arrow">▼</span>
+            </button>
+            <div class="faq-answer">
+                A User account lets you browse and register for events, manage your tickets, and update your profile. An
+                Organizer account includes all User features plus the ability to create events, manage attendees, track
+                revenue, and access analytics through the Organizer Dashboard.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                How do I track my event's performance?
+                <span class="arrow">▼</span>
+            </button>
+            <div class="faq-answer">
+                As an organizer, your dashboard provides real-time analytics including total attendees, ticket sales,
+                revenue reports, and attendee lists. You can view performance for each individual event and export data
+                for your records.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                How do I contact support?
+                <span class="arrow">▼</span>
+            </button>
+            <div class="faq-answer">
+                You can reach our support team via the <a href="{{ url_for('contact') }}">Contact page</a>, by emailing
+                support@eventflow.com, or by calling +91-278-242-1234 during business hours (Mon-Sat, 10AM-7PM IST). We
+                aim to respond within 24 hours.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}{% if edit %}Edit Event{% else %}Create Event{% endif %}{% endblock %}
+{% block content %}
+<div class="container" style="padding:40px 24px 80px;">
+    <div class="container-sm">
+        <div class="page-header" style="padding-top:20px;">
+            <h1>{% if edit %}✏️ Edit Event{% else %}➕ Create New Event{% endif %}</h1>
+            <p>Fill in the details below to {% if edit %}update{% else %}publish{% endif %} your event.</p>
+        </div>
+
+        <div class="glass-card">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">Event Name *</label>
+                    <input type="text" id="title" name="title" class="form-control" placeholder="e.g., Tech Summit 2026"
+                        value="{{ event.title if edit else '' }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" class="form-control"
+                        placeholder="Describe your event in detail..."
+                        rows="5">{{ event.description if edit else '' }}</textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" class="form-control">
+                            {% for cat in ['General', 'Technology', 'Music', 'Business', 'Art', 'Health', 'Food',
+                            'Sports', 'Education', 'Networking'] %}
+                            <option value="{{ cat }}" {% if edit and event.category==cat %}selected{% endif %}>{{ cat }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location" class="form-control" placeholder="City, State"
+                            value="{{ event.location if edit else '' }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="venue">Venue</label>
+                    <input type="text" id="venue" name="venue" class="form-control"
+                        placeholder="e.g., Convention Center" value="{{ event.venue if edit else '' }}">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date">Start Date *</label>
+                        <input type="date" id="date" name="date" class="form-control"
+                            value="{{ event.date if edit else '' }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Start Time *</label>
+                        <input type="time" id="time" name="time" class="form-control"
+                            value="{{ event.time if edit else '' }}" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="end_date">End Date</label>
+                        <input type="date" id="end_date" name="end_date" class="form-control"
+                            value="{{ event.end_date if edit else '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="end_time">End Time</label>
+                        <input type="time" id="end_time" name="end_time" class="form-control"
+                            value="{{ event.end_time if edit else '' }}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="price">Ticket Price ($)</label>
+                        <input type="number" id="price" name="price" class="form-control" placeholder="0 for free"
+                            min="0" step="0.01" value="{{ event.price if edit else '0' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="capacity">Capacity</label>
+                        <input type="number" id="capacity" name="capacity" class="form-control" placeholder="100"
+                            min="1" value="{{ event.capacity if edit else '100' }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="banner">Event Banner Image</label>
+                    <input type="file" id="banner" name="banner" class="form-control" accept="image/*">
+                    {% if edit and event.banner %}
+                    <p class="text-muted mt-1" style="font-size:0.8rem;">Current: {{ event.banner }}</p>
+                    {% endif %}
+                </div>
+                <div style="display:flex;gap:12px;margin-top:12px;">
+                    <button type="submit" class="btn btn-primary btn-lg">{% if edit %}💾 Update Event{% else %}🚀
+                        Publish Event{% endif %}</button>
+                    <a href="{{ url_for('organizer_dashboard') }}" class="btn btn-secondary btn-lg">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

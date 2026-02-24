@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">🚀 #1 Event Platform in 2026</div>
+        <h1>Discover & Create<br>Extraordinary Events</h1>
+        <p>From tech conferences to music festivals — find your next unforgettable experience or create one that brings
+            people together.</p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('events') }}" class="btn btn-primary btn-lg">🔍 Explore Events</a>
+            {% if not current_user %}
+            <a href="{{ url_for('signup') }}" class="btn btn-secondary btn-lg">✨ Get Started Free</a>
+            {% else %}
+            <a href="{{ url_for('create_event') }}" class="btn btn-secondary btn-lg">➕ Create Event</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Stats -->
+<section class="container">
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-number">{{ stats.events }}+</div>
+            <div class="stat-label">Events Hosted</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">{{ stats.users }}+</div>
+            <div class="stat-label">Active Users</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">{{ stats.tickets }}+</div>
+            <div class="stat-label">Tickets Sold</div>
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="features-section container">
+    <div class="section-header">
+        <h2>Why EventFlow?</h2>
+        <p>Everything you need to discover, create, and manage events in one platform.</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon purple">🎯</div>
+            <h3>Smart Discovery</h3>
+            <p>Find events tailored to your interests with powerful search and filters by category, location, and price.
+            </p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon pink">🎨</div>
+            <h3>Easy Event Creation</h3>
+            <p>Create stunning event pages in minutes with our intuitive form — add banners, set tickets, and publish
+                instantly.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon emerald">💰</div>
+            <h3>Secure Payments</h3>
+            <p>Accept payments seamlessly with our integrated payment system. Track revenue in real-time from your
+                dashboard.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon amber">📊</div>
+            <h3>Real-time Analytics</h3>
+            <p>Monitor ticket sales, attendee counts, and revenue with comprehensive analytics on your organizer
+                dashboard.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon blue">🎫</div>
+            <h3>Digital Tickets</h3>
+            <p>Get instant digital tickets with QR codes. Manage your registrations and download receipts from your
+                dashboard.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon red">🛡️</div>
+            <h3>Admin Control</h3>
+            <p>Full admin panel to manage users, approve events, and monitor platform analytics with powerful moderation
+                tools.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Upcoming Events Preview -->
+{% if events %}
+<section class="events-section container">
+    <div class="section-header">
+        <h2>Upcoming Events</h2>
+        <p>Don't miss out on these trending events happening soon.</p>
+    </div>
+    <div class="events-grid">
+        {% for event in events[:6] %}
+        <div class="event-card">
+            {% if event.banner %}
+            <img src="{{ url_for('static', filename='uploads/' + event.banner) }}" alt="{{ event.title }}"
+                class="event-card-banner">
+            {% else %}
+            <div class="event-card-banner">🎪</div>
+            {% endif %}
+            <div class="event-card-body">
+                <span class="event-card-category">{{ event.category }}</span>
+                <h3><a href="{{ url_for('event_detail', event_id=event.id) }}">{{ event.title }}</a></h3>
+                <div class="event-meta">
+                    <span>📅 {{ event.date }} at {{ event.time }}</span>
+                    <span>📍 {{ event.location }}</span>
+                </div>
+                <div class="event-card-footer">
+                    {% if event.price == 0 %}
+                    <span class="event-price free">Free</span>
+                    {% else %}
+                    <span class="event-price">₹{{ "%.0f"|format(event.price) }}</span>
+                    {% endif %}
+                    <a href="{{ url_for('event_detail', event_id=event.id) }}" class="btn btn-sm btn-primary">View
+                        Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+        <a href="{{ url_for('events') }}" class="btn btn-secondary btn-lg">View All Events →</a>
+    </div>
+</section>
+{% endif %}
+
+<!-- Testimonials -->
+<section class="section container">
+    <div class="section-header">
+        <h2>What People Say</h2>
+        <p>Trusted by event organizers and attendees worldwide.</p>
+    </div>
+    <div class="testimonials-grid">
+        <div class="testimonial-card">
+            <p class="quote">"EventFlow thi amare amara annual tech conference manage karvanu aasnaan thai gayu.
+                Dashboard analytics zabardast chhe, ane ticket sales double thai gai!"</p>
+            <div class="testimonial-author">
+                <div class="testimonial-avatar">RP</div>
+                <div>
+                    <div class="name">Rajesh Patel</div>
+                    <div class="role">Tech Summit Organizer, Bhavnagar</div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-card">
+            <p class="quote">"Mane Bhavnagar ma thata ghanaa badha events khabar noti. Search filters thi khubaj aasaani
+                thi mane je joiye te mali jaay chhe!"</p>
+            <div class="testimonial-author">
+                <div class="testimonial-avatar">PJ</div>
+                <div>
+                    <div class="name">Priya Joshi</div>
+                    <div class="role">Event Enthusiast, Bhavnagar</div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-card">
+            <p class="quote">"Amari charity gala setup karvu khubaj aasaan hatu. Payment integration smooth hatu ane
+                attendee management top-notch chhe."</p>
+            <div class="testimonial-author">
+                <div class="testimonial-avatar">KM</div>
+                <div>
+                    <div class="name">Kiran Mehta</div>
+                    <div class="role">NGO Director, Gujarat</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section container">
+    <div class="cta-card">
+        <h2>Ready to Create Your Event?</h2>
+        <p>Join thousands of organizers who trust EventFlow to bring their events to life.</p>
+        <div class="cta-buttons">
+            <a href="{{ url_for('signup') }}" class="btn btn-primary btn-lg">🚀 Start for Free</a>
+            <a href="{{ url_for('contact') }}" class="btn btn-secondary btn-lg">📞 Contact Sales</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

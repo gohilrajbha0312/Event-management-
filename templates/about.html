@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}About{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>About EventFlow</h1>
+        <p>The premier platform for discovering and creating extraordinary events worldwide.</p>
+    </div>
+
+    <!-- Mission -->
+    <section class="section">
+        <div class="glass-card" style="text-align:center;padding:60px 40px;">
+            <h2 style="font-size:2rem;margin-bottom:16px;">Our Mission</h2>
+            <p style="color:var(--text-secondary);font-size:1.1rem;max-width:700px;margin:0 auto;line-height:1.8;">
+                We believe that events have the power to bring people together, spark innovation, and create lasting
+                memories.
+                EventFlow was built to make it effortless for anyone to discover exciting events and for organizers to
+                bring their vision to life — all with a premium, seamless experience.
+            </p>
+        </div>
+    </section>
+
+    <!-- Values -->
+    <section>
+        <div class="section-header">
+            <h2>What We Stand For</h2>
+            <p>The values that drive our platform forward.</p>
+        </div>
+        <div class="about-grid">
+            <div class="glass-card about-card">
+                <div class="icon">🌍</div>
+                <h3>Community First</h3>
+                <p>We build tools that bring communities together, from local meetups to global conferences.</p>
+            </div>
+            <div class="glass-card about-card">
+                <div class="icon">🔒</div>
+                <h3>Trust & Security</h3>
+                <p>Your data and transactions are protected with enterprise-grade security measures.</p>
+            </div>
+            <div class="glass-card about-card">
+                <div class="icon">🚀</div>
+                <h3>Innovation</h3>
+                <p>We continuously evolve our platform with cutting-edge features to stay ahead.</p>
+            </div>
+            <div class="glass-card about-card">
+                <div class="icon">💡</div>
+                <h3>Simplicity</h3>
+                <p>Creating and discovering events should be intuitive, fast, and enjoyable for everyone.</p>
+            </div>
+            <div class="glass-card about-card">
+                <div class="icon">🤝</div>
+                <h3>Inclusivity</h3>
+                <p>Events for everyone — with free options, accessibility features, and global reach.</p>
+            </div>
+            <div class="glass-card about-card">
+                <div class="icon">📊</div>
+                <h3>Transparency</h3>
+                <p>Clear pricing, real-time analytics, and open communication with organizers and attendees.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="section">
+        <div class="section-header">
+            <h2>By the Numbers</h2>
+        </div>
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number">50K+</div>
+                <div class="stat-label">Events Hosted</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">2M+</div>
+                <div class="stat-label">Tickets Sold</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">120+</div>
+                <div class="stat-label">Countries</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-card">
+            <h2>Join the EventFlow Community</h2>
+            <p>Whether you're an organizer or attendee, we'd love to have you.</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('signup') }}" class="btn btn-primary btn-lg">Get Started Free</a>
+                <a href="{{ url_for('contact') }}" class="btn btn-secondary btn-lg">Contact Us</a>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
