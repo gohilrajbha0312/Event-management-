@@ -370,7 +370,24 @@ def admin_dashboard():
 @role_required('admin')
 def delete_user(user_id):
     db = get_db()
-    db.execute("DELETE FROM users WHERE id = ? AND role != 'admin'", (user_id,))
+    target = db.execute("SELECT id, role FROM users WHERE id = ?", (user_id,)).fetchone()
+    if not target or target['role'] == 'admin':
+        flash('Cannot delete that account.', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    # Remove dependent rows (SQLite FK: payments → tickets → events → users)
+    db.execute(
+        """DELETE FROM payments WHERE ticket_id IN (
+            SELECT id FROM tickets WHERE user_id = ? OR event_id IN (
+                SELECT id FROM events WHERE organizer_id = ?))""",
+        (user_id, user_id),
+    )
+    db.execute("DELETE FROM tickets WHERE user_id = ?", (user_id,))
+    db.execute(
+        "DELETE FROM tickets WHERE event_id IN (SELECT id FROM events WHERE organizer_id = ?)",
+        (user_id,),
+    )
+    db.execute("DELETE FROM events WHERE organizer_id = ?", (user_id,))
+    db.execute("DELETE FROM users WHERE id = ?", (user_id,))
     db.commit()
     flash('User deleted.', 'success')
     return redirect(url_for('admin_dashboard'))
@@ -636,7 +653,12 @@ def faq():
 
 # ─── Initialize and Run ─────────────────────────────────────────────
 
+# Ensure uploads folder exists
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+# Always initialize database (needed for both local dev and production)
+init_db()
+seed_data()
+
 if __name__ == '__main__':
-    init_db()
-    seed_data()
     app.run(debug=True, port=5000)
