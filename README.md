@@ -115,10 +115,9 @@ These are inserted only when the users table is empty:
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | dmin@eventflow.com | dmin123 |
-| Organizer | 
-ajesh@eventflow.com | organizer123 |
-| User | mit@eventflow.com | user123 |
+| Admin | admin@eventflow.com | admin123 |
+| Organizer | rajesh@eventflow.com | organizer123 |
+| User | amit@eventflow.com | user123 |
 
 Change these passwords in production and avoid using demo credentials on a public server.
 
