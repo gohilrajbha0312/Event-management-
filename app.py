@@ -15,8 +15,8 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max upload
 
 # ─── UPI Merchant Configuration ─────────────────────────────────────
 # Change this to your real UPI ID to receive payments
-UPI_MERCHANT_ID = 'gohilrajbha1800@okicici'
-UPI_MERCHANT_NAME = 'Raj Gohil'
+UPI_MERCHANT_ID = 'chauhantirthrajsinh91@oksbi'
+UPI_MERCHANT_NAME = 'Tirthrajsinh Chauhan'
 
 DATABASE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eventflow.db')
 

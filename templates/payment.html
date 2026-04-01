@@ -1,49 +1,46 @@
 {% extends 'base.html' %}
 {% block title %}UPI Payment{% endblock %}
 {% block content %}
+<style>
+    .payment-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        align-items: start;
+    }
+    @media (max-width: 768px) {
+        .payment-layout { grid-template-columns: 1fr; }
+    }
+</style>
 <div class="container" style="max-width:900px;margin:0 auto;">
     <div class="page-header" style="padding-top:20px;">
         <h1>📱 Pay via UPI</h1>
-        <p>Scan QR code or tap to open your UPI app</p>
+        <p>Scan the QR code or tap to open your UPI app</p>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start;">
+    <div class="payment-layout">
 
-        <!-- QR Card (matches the user's screenshot style) -->
-        <div style="background:#eef2ff;border-radius:24px;padding:40px 30px;text-align:center;">
-            <!-- Profile -->
-            <div style="margin-bottom:20px;">
-                <div
-                    style="width:50px;height:50px;border-radius:50%;background:#ccc;display:inline-block;vertical-align:middle;margin-right:10px;overflow:hidden;">
-                    <svg viewBox="0 0 50 50" style="width:100%;height:100%;fill:#888;">
-                        <circle cx="25" cy="20" r="9" />
-                        <ellipse cx="25" cy="45" rx="16" ry="14" />
-                    </svg>
-                </div>
-                <span style="font-size:1.5rem;font-weight:700;color:#1a1a2e;vertical-align:middle;">{{ upi_merchant_name
-                    }}</span>
-            </div>
-
-            <!-- QR Code -->
+        <!-- Merchant UPI card (static QR image, cropped from your screenshot) -->
+        <div style="background:linear-gradient(180deg,#252525 0%,#1a1a1a 100%);border-radius:24px;padding:28px 20px 32px;text-align:center;border:1px solid rgba(255,255,255,0.06);">
             <div
-                style="background:#fff;border-radius:18px;padding:24px;display:inline-block;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-                <div id="qr-code" style="display:inline-block;"></div>
+                style="margin:0 auto 18px;max-width:340px;border-radius:20px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,0.45);">
+                <img src="{{ url_for('static', filename='images/upi-merchant-qr.png') }}"
+                    alt="UPI QR — pay {{ upi_merchant_name }}"
+                    style="width:100%;height:auto;display:block;vertical-align:middle;">
             </div>
 
-            <!-- UPI ID -->
-            <p style="color:#333;font-size:1rem;margin:12px 0 4px;">
-                UPI ID: <strong>{{ upi_merchant_id }}</strong>
+            <p style="color:#e8e8e8;font-size:0.95rem;margin:0 0 6px;">
+                UPI ID: <strong style="color:#fff;">{{ upi_merchant_id }}</strong>
             </p>
 
             <!-- Amount Badge -->
             <div
-                style="margin-top:16px;background:#fff;border-radius:12px;padding:12px 24px;display:inline-block;box-shadow:0 1px 6px rgba(0,0,0,0.06);">
-                <span style="font-size:0.85rem;color:#666;">Amount to Pay</span><br>
-                <span style="font-size:1.8rem;font-weight:800;color:#1a1a2e;">₹{{ "%.0f"|format(total) }}</span>
+                style="margin-top:16px;background:rgba(255,255,255,0.08);border-radius:12px;padding:12px 24px;display:inline-block;">
+                <span style="font-size:0.85rem;color:#aaa;">Amount to pay</span><br>
+                <span style="font-size:1.8rem;font-weight:800;color:#fff;">₹{{ "%.0f"|format(total) }}</span>
             </div>
 
-            <!-- Scan instruction -->
-            <p style="color:#555;font-size:0.9rem;margin-top:20px;">
-                Scan to pay with any UPI app
+            <p style="color:#999;font-size:0.88rem;margin-top:18px;margin-bottom:0;">
+                Use any UPI app to send exactly this amount.
             </p>
 
             <!-- UPI App Buttons (for mobile) -->
@@ -152,17 +149,4 @@
         </div>
     </div>
 </div>
-
-<!-- QR Code JS Library -->
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script>
-    new QRCode(document.getElementById("qr-code"), {
-        text: "{{ upi_link }}",
-        width: 220,
-        height: 220,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-    });
-</script>
 {% endblock %}
